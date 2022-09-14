@@ -5,6 +5,7 @@ from rest_framework.views import APIView
 
 # Create your views here.
 from .services.product_service import (
+    read_product,
     create_product,
 )
 
@@ -12,6 +13,10 @@ class ProductView(APIView):
     """
     상품에 관련된 View
     """
+    def get(self, request):
+        read_product_serializer = read_product()
+        return Response(read_product_serializer, status=status.HTTP_200_OK)
+
     def post(self, request):
         create_product(request.data, request.user)
         return Response({"detail" : "상품을 등록하였습니다."}, status=status.HTTP_200_OK)
