@@ -1,6 +1,8 @@
 from django.contrib.auth.hashers import check_password
 from user.serializers import UserSignupSerializer, UserUpdateSerializer
 from user.models import User as UserModel
+from product.models import Product as ProductModel
+
 
 def create_user(create_data : dict[str,str]) -> None:
     """
@@ -33,3 +35,4 @@ def charge_point(point_data, user):
     user.point = user.point + int(point_data["point"])
     user.save()
     return point_data["point"], user.point
+
