@@ -8,6 +8,7 @@ from .services.product_service import (
     read_product,
     create_product,
     update_product,
+    delete_product,
     check_is_admin,
 )
 
@@ -30,5 +31,12 @@ class ProductView(APIView):
             update_product(request.data, product_id)
             return Response({"detail" : "상품을 수정하였습니다."}, status=status.HTTP_200_OK)
         return Response({"detail" : "관리자만 상품을 수정할 수 있습니다."}, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, product_id):
+        if check_is_admin(request.user):
+            delete_product(product_id)
+            return Response({"detail" : "상품을 삭제하였습니다."}, status=status.HTTP_200_OK)
+        return Response({"detail" : "관리자만 상품을 삭제할 수 있습니다."}, status=status.HTTP_400_BAD_REQUEST)
+
 
     

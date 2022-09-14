@@ -19,6 +19,10 @@ def update_product(update_data, product_id):
     product_serializer.is_valid(raise_exception=True)
     product_serializer.save()
 
+def delete_product(product_id):
+    delete_product_obj = ProductModel.objects.get(id=product_id)
+    delete_product_obj.delete()
+
 def check_is_admin(user):
     if user.is_admin == True:
         return True
