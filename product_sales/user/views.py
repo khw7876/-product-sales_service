@@ -6,6 +6,7 @@ from rest_framework.views import APIView
 from user.services.user_service import (
     create_user,
     update_user,
+    delete_user,
     check_password_is_possible
 )
 
@@ -24,3 +25,6 @@ class UserView(APIView):
             return Response({"detail" : "비밀번호가 변경되었습니다."}, status=status.HTTP_200_OK)
         return Response({"detail" : "기존의 비밀번호와 일치하는 비밀번호입니다."}, status=status.HTTP_400_BAD_REQUEST)
 
+    def delete(self, request : Request, user_id : int) -> Response:
+        delete_user(user_id)
+        return Response({"detail" : "회원 탈퇴가 완료되었습니다."}, status=status.HTTP_200_OK)

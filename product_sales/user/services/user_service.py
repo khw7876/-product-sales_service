@@ -20,6 +20,10 @@ def update_user(update_data : dict[str, str], user: UserModel) -> None:
     user_data_serializer.is_valid(raise_exception=True)
     user_data_serializer.save()
 
+def delete_user(user_id):
+    user_for_delete = UserModel.objects.get(id=user_id)
+    user_for_delete.is_active = False
+
 def check_password_is_possible(password, user):
     if (check_password(password, user.password)):
         return False
