@@ -7,7 +7,8 @@ from user.services.user_service import (
     create_user,
     update_user,
     delete_user,
-    check_password_is_possible
+    check_password_is_possible,
+    charge_point,
 )
 
 class UserView(APIView):
@@ -28,3 +29,12 @@ class UserView(APIView):
     def delete(self, request : Request, user_id : int) -> Response:
         delete_user(user_id)
         return Response({"detail" : "회원 탈퇴가 완료되었습니다."}, status=status.HTTP_200_OK)
+
+class ChargePointView(APIView):
+    """
+    유저가 포인트를 충전하는 View
+    """
+    def post(self, request):
+        user = request.user
+        before_point, cur_point = charge_point(request.data, user)
+        return Response({"detail" : (user.username + "님의 포인트가 " + str(before_point) + "포인트가 충전되어서" + str(cur_point) + "포인트가 되셨습니다.")}, status=status.HTTP_200_OK)

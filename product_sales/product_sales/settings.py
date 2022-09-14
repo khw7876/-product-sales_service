@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework_simplejwt",
     'user',
+    'product'
 ]
 
 REST_USE_JWT = True

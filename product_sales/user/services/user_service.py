@@ -28,3 +28,8 @@ def check_password_is_possible(password, user):
     if (check_password(password, user.password)):
         return False
     return True
+
+def charge_point(point_data, user):
+    user.point = user.point + int(point_data["point"])
+    user.save()
+    return point_data["point"], user.point
