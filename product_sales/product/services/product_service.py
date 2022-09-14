@@ -1,6 +1,5 @@
-from functools import partial
-from product.serializers import ProductSerializer
-from product.models import Product as ProductModel
+from product.serializers import ProductSerializer, PayHistorySerializer
+from product.models import Product as ProductModel, PayHistory as PayHistoryModel
 
 def create_product(create_data, user):
     create_data["user"] = user
@@ -27,3 +26,32 @@ def check_is_admin(user):
     if user.is_admin == True:
         return True
     return False
+
+def get_total_price(pay_data, product_id):
+    product_count = pay_data["count"]
+    product_obj = ProductModel.objects.get(id=product_id)
+
+    total_price = int(product_count) * int(product_obj.price) + int(product_obj.delivery_fee)
+    return total_price
+
+def check_user_can_pay(total_price, user):
+    if user.point > total_price:
+        return True
+    return False
+    
+def pay_user_point(total_price, user):
+    user.point = int(user.point) - int(total_price)
+    user.save()
+    return user.point
+
+def create_pay_history(pay_data, user, product_id, balance_point, total_price):
+    pay_data["user"] = user.id
+    pay_data["product"] = product_id
+    pay_data["balance"] = balance_point
+    pay_data["total_price"] = total_price
+    pay_history_serializer = PayHistorySerializer(data=pay_data)
+    pay_history_serializer.is_valid(raise_exception=True)
+    pay_history_serializer.save()
+
+
+
