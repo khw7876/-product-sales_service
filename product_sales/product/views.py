@@ -14,6 +14,9 @@ from .services.product_service import (
     check_user_can_pay,
     pay_user_point,
     create_pay_history,
+    read_pay_history,
+    detail_read_pay_history,
+    refund_product
 )
 
 class ProductView(APIView):
@@ -46,7 +49,9 @@ class PayView(APIView):
     """
     결제에 관련된 View
     """
-
+    def get(self, request):
+        pay_history_serializer = read_pay_history()
+        return Response(pay_history_serializer, status=status.HTTP_200_OK)
 
     def post(self, request, product_id):
         user = request.user
@@ -57,4 +62,17 @@ class PayView(APIView):
             return Response({"detail" : ("결제가 완료되었습니다. 남은 포인트는 " + str(balance_point) + "입니다.")}, status=status.HTTP_200_OK)
         return Response({"detail" : "포인트가 부족합니다."}, status=status.HTTP_400_BAD_REQUEST)
 
-    
+    def delete(self, request, pay_history_id):
+        if check_is_admin(request.user):
+            refund_price, after_user_point = refund_product(pay_history_id)
+            return Response({"detail" : ("환불이 완료되었습니다. " + str(refund_price) + "포인트가 환불되어서 현재 포인트는" + str(after_user_point) + "입니다.")}, status=status.HTTP_200_OK)
+        return Response({"detail" : "관리자만 환불을 진행 할 수 있습니다."}, status=status.HTTP_400_BAD_REQUEST)
+class DetailPayHistoryView(APIView):
+    """
+    결제 상세내역 조회
+    """
+
+    def get(self, request, pay_history_id):
+        detail_pay_history_serializer = detail_read_pay_history(pay_history_id)
+        return Response(detail_pay_history_serializer, status=status.HTTP_200_OK)
+

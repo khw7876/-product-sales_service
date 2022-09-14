@@ -53,5 +53,22 @@ def create_pay_history(pay_data, user, product_id, balance_point, total_price):
     pay_history_serializer.is_valid(raise_exception=True)
     pay_history_serializer.save()
 
+def read_pay_history():
+    all_pay_history = PayHistoryModel.objects.all()
+    pay_history_serializer = PayHistorySerializer(all_pay_history, many=True).data
+    return pay_history_serializer
+
+def detail_read_pay_history(pay_history_id):
+    pay_history_obj = PayHistoryModel.objects.get(id=pay_history_id)
+    detail_pay_history_serializer = PayHistorySerializer(pay_history_obj).data
+    return detail_pay_history_serializer
 
 
+def refund_product(pay_history_id):
+    pay_history_obj = PayHistoryModel.objects.get(id=pay_history_id)
+    user = pay_history_obj.user
+    user.point = int(user.point) + int(pay_history_obj.total_price)
+    pay_history_obj.delete()
+    user.save()
+
+    return pay_history_obj.total_price, user.point
