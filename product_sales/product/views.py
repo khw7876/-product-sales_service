@@ -7,6 +7,7 @@ from rest_framework.views import APIView
 from .services.product_service import (
     read_product,
     create_product,
+    update_product,
     check_is_admin,
 )
 
@@ -23,5 +24,11 @@ class ProductView(APIView):
             create_product(request.data, request.user)
             return Response({"detail" : "상품을 등록하였습니다."}, status=status.HTTP_200_OK)
         return Response({"detail" : "관리자만 상품을 등록할 수 있습니다."}, status=status.HTTP_400_BAD_REQUEST)
+
+    def put(self, request, product_id):
+        if check_is_admin(request.user):
+            update_product(request.data, product_id)
+            return Response({"detail" : "상품을 수정하였습니다."}, status=status.HTTP_200_OK)
+        return Response({"detail" : "관리자만 상품을 수정할 수 있습니다."}, status=status.HTTP_400_BAD_REQUEST)
 
     
