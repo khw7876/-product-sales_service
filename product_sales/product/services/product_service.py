@@ -11,3 +11,8 @@ def read_product():
     all_product = ProductModel.objects.all()
     product_serializer = ProductSerializer(all_product, many = True).data
     return product_serializer
+
+def check_is_admin(user):
+    if user.is_admin == True:
+        return True
+    return False
