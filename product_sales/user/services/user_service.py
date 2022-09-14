@@ -1,4 +1,4 @@
-
+from django.contrib.auth.hashers import check_password
 from user.serializers import UserSignupSerializer, UserUpdateSerializer
 from user.models import User as UserModel
 
@@ -20,3 +20,8 @@ def update_user(update_data : dict[str, str], user: UserModel) -> None:
     user_data_serializer = UserUpdateSerializer(user, data=update_data, partial=True)
     user_data_serializer.is_valid(raise_exception=True)
     user_data_serializer.save()
+
+def check_password_is_possible(password, user):
+    if (check_password(password, user.password)):
+        return True
+    return False
