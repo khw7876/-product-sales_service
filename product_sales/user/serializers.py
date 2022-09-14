@@ -32,9 +32,20 @@ class UserUpdateSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("비밀번호는 8자 이상 특수문자 포함해 입력해주세요")
         return data
     
+    def update(self, instance, validated_data):
+        for key, value in validated_data.items():
+            if key == "password":
+                instance.set_password(value)
+                continue
+            
+            setattr(instance, key, value)
+        instance.save()
+        return instance
+
     class Meta:
         model = UserModel
         fields = "__all__"
         extra_kwargs = {
-            'username': {'read_only': True}
+            'username': {'read_only': True},
+            'point': {'read_only': True},
         }

@@ -17,7 +17,6 @@ class UserView(APIView):
         create_user(request.data)
         return Response({"detail": "회원가입을 성공하였습니다"}, status=status.HTTP_200_OK)
 
-
     def put(self, request : Request) -> Response:
         user = request.user
         if check_password_is_possible(request.data["password"], user):

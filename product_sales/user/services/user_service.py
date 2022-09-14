@@ -16,12 +16,11 @@ def create_user(create_data : dict[str,str]) -> None:
     user_data_serializer.save()
 
 def update_user(update_data : dict[str, str], user: UserModel) -> None:
-    update_data["cur_password"] = user.password
     user_data_serializer = UserUpdateSerializer(user, data=update_data, partial=True)
     user_data_serializer.is_valid(raise_exception=True)
     user_data_serializer.save()
 
 def check_password_is_possible(password, user):
     if (check_password(password, user.password)):
-        return True
-    return False
+        return False
+    return True
