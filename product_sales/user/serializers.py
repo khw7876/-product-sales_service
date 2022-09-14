@@ -23,3 +23,18 @@ class UserSignupSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserModel
         fields = "__all__"
+
+
+class UserUpdateSerializer(serializers.ModelSerializer):
+    def validate(self, data):
+        condition = all(x not in ["!", "@", "#", "$", "%", "^", "&", "*", "_"] for x in data["password"])
+        if len(data["password"]) < 8 or condition:
+            raise serializers.ValidationError("비밀번호는 8자 이상 특수문자 포함해 입력해주세요")
+        return data
+    
+    class Meta:
+        model = UserModel
+        fields = "__all__"
+        extra_kwargs = {
+            'username': {'read_only': True}
+        }
