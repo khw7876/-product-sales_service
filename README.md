@@ -3,7 +3,7 @@
 
 ## 👉 ERD
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/a3ce4ee0-81f2-49c1-bdff-ca5ed2a2bbfa/Untitled.png)
+![image](https://user-images.githubusercontent.com/101394490/190910621-c492551d-df60-4f3c-95df-468cebd6a395.png)
 
 
 ## 📌 컨벤션
