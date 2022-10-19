@@ -50,7 +50,7 @@ SIMPLE_JWT = {
     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
     "ROTATE_REFRESH_TOKENS": True,
     "BLACKLIST_AFTER_ROTATION": True,
-    "SIGNING_KEY": os.environ.get('JWT_SECRET_KEY', "SIMPLE")
+    "SIGNING_KEY": os.environ.get('JWT_SECRET_KEY')
 }
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [ # 기본적인 view 접근 권한 지정
@@ -97,8 +97,12 @@ WSGI_APPLICATION = 'product_sales.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('POSTGRE_SQL_NAME'),
+        'USER': os.environ.get('POSTGRE_SQL_USER'),
+        'PASSWORD': os.environ.get('POSTGRE_SQL_PASSWORD'),
+        'HOST': os.environ.get('POSTGRE_SQL_HOST'),
+        'PORT': os.environ.get('POSTGRE_SQL_PORT'),
     }
 }
 
