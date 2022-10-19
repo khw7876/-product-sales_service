@@ -73,7 +73,7 @@ class PayView(APIView):
         (Create) 유저가 상품을 결제하는 메소드
         """
         user = request.user
-        total_price = get_total_price(request.data, product_id)
+        total_price = get_total_price(request.data["count"], product_id)
         if check_user_can_pay(total_price, user):
             balance_point = pay_user_point(total_price, user)
             create_pay_history(request.data, user, product_id ,balance_point, total_price)
