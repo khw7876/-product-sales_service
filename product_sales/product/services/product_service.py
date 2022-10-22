@@ -5,7 +5,8 @@ from product.models import Product as ProductModel, PayHistory as PayHistoryMode
 
 from user.models import User
 
-def create_product(create_data : dict, user : User):
+
+def create_product(create_data: dict, user: User):
     """
     관리자가 상품을 등록하는 service
     Args:
@@ -17,9 +18,10 @@ def create_product(create_data : dict, user : User):
         user (user): 로그인이 되어있는 User_obj
     """
     create_data["user"] = user
-    product_serializer = ProductSerializer(data = create_data)
+    product_serializer = ProductSerializer(data=create_data)
     product_serializer.is_valid(raise_exception=True)
     product_serializer.save()
+
 
 def read_product():
     """
@@ -28,10 +30,11 @@ def read_product():
         ProductSerializer: 저장되어있는 전체 ProductModel의 serializer
     """
     all_product = ProductModel.objects.all()
-    product_serializer = ProductSerializer(all_product, many = True).data
+    product_serializer = ProductSerializer(all_product, many=True).data
     return product_serializer
 
-def update_product(update_data : dict[str, Union[str, int]], product_id : int) -> None:
+
+def update_product(update_data: dict[str, Union[str, int]], product_id: int) -> None:
     """
     등록되어있는 상품의 id를 토대로 상품을 update하는 service
     Args:
@@ -42,11 +45,13 @@ def update_product(update_data : dict[str, Union[str, int]], product_id : int) -
         product_id (int): 수정할 상품의 id
     """
     update_product_obj = ProductModel.objects.get(id=product_id)
-    product_serializer = ProductSerializer(update_product_obj, update_data, partial = True)
+    product_serializer = ProductSerializer(
+        update_product_obj, update_data, partial=True)
     product_serializer.is_valid(raise_exception=True)
     product_serializer.save()
 
-def delete_product(product_id : int) -> None:
+
+def delete_product(product_id: int) -> None:
     """
     등록되어있는 상품의 id를 토대로 상품을 등록해제하는 service
     Args:
@@ -55,7 +60,8 @@ def delete_product(product_id : int) -> None:
     delete_product_obj = ProductModel.objects.get(id=product_id)
     delete_product_obj.delete()
 
-def check_is_admin(user : User) -> bool:
+
+def check_is_admin(user: User) -> bool:
     """
     현재 서비스를이용하는 유저가 관리자인지를 체크하는 service
     Args:
@@ -68,7 +74,8 @@ def check_is_admin(user : User) -> bool:
         return True
     return False
 
-def get_total_price(product_count : int, product_id : int) -> int:
+
+def get_total_price(product_count: int, product_id: int) -> int:
     """
     결제하려는 상품의 배송비를 포함한 총 결제금액을 구하는 service
     Args:
@@ -79,10 +86,12 @@ def get_total_price(product_count : int, product_id : int) -> int:
         int: (상품의 금액 * 상품의 수량) + 배송비
     """
     product_obj = ProductModel.objects.get(id=product_id)
-    total_price = int(product_count) * int(product_obj.price) + int(product_obj.delivery_fee)
+    total_price = int(product_count) * int(product_obj.price) + \
+        int(product_obj.delivery_fee)
     return total_price
 
-def check_user_can_pay(total_price : int, user : User) -> bool:
+
+def check_user_can_pay(total_price: int, user: User) -> bool:
     """
     유저가 결제할 수 있는 포인트를 지녔는가를 확인하는 service
     Args:
@@ -96,8 +105,9 @@ def check_user_can_pay(total_price : int, user : User) -> bool:
     if user.point >= total_price:
         return True
     return False
-    
-def pay_user_point(total_price : int, user : User) -> int:
+
+
+def pay_user_point(total_price: int, user: User) -> int:
     """
     결제 직전 유저의 포인트가 차감이 되는 servic
     Args:
@@ -111,7 +121,8 @@ def pay_user_point(total_price : int, user : User) -> int:
     user.save()
     return user.point
 
-def create_pay_history(pay_data : dict, user : User, product_id : int, balance_point : int, total_price : int) -> None:
+
+def create_pay_history(pay_data: dict, user: User, product_id: int, balance_point: int, total_price: int) -> None:
     """
     결제가 진행된 후, 결제내역을 생성해주는 Service
     Args:
@@ -131,6 +142,7 @@ def create_pay_history(pay_data : dict, user : User, product_id : int, balance_p
     pay_history_serializer.is_valid(raise_exception=True)
     pay_history_serializer.save()
 
+
 def read_pay_history() -> PayHistorySerializer:
     """
     전체 결제내역을 확인하는 service
@@ -138,10 +150,12 @@ def read_pay_history() -> PayHistorySerializer:
         PayHistorySerializer: 결제내역 전체의 seriliazer
     """
     all_pay_history = PayHistoryModel.objects.all()
-    pay_history_serializer = PayHistorySerializer(all_pay_history, many=True).data
+    pay_history_serializer = PayHistorySerializer(
+        all_pay_history, many=True).data
     return pay_history_serializer
 
-def detail_read_pay_history(pay_history_id : int)-> PayHistorySerializer:
+
+def detail_read_pay_history(pay_history_id: int) -> PayHistorySerializer:
     """
     결제내역 하나의 상세내역을 확인하는 service
     Args:
@@ -154,7 +168,7 @@ def detail_read_pay_history(pay_history_id : int)-> PayHistorySerializer:
     return detail_pay_history_serializer
 
 
-def refund_product(pay_history_id : int):
+def refund_product(pay_history_id: int):
     """
     결제내역을 토대로 환불을 진행하는 service
     Args:

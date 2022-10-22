@@ -53,7 +53,7 @@ SIMPLE_JWT = {
     "SIGNING_KEY": os.environ.get('JWT_SECRET_KEY')
 }
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': [ # 기본적인 view 접근 권한 지정
+    'DEFAULT_PERMISSION_CLASSES': [  # 기본적인 view 접근 권한 지정
         'rest_framework.permissions.AllowAny'
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
@@ -102,7 +102,7 @@ DATABASES = {
         'USER': os.environ.get('POSTGRE_SQL_USER'),
         'PASSWORD': os.environ.get('POSTGRE_SQL_PASSWORD'),
         'HOST': os.environ.get('POSTGRE_SQL_HOST'),
-        'PORT': os.environ.get('POSTGRE_SQL_PORT'),
+        'PORT': os.environ.get('POSTGRE_SQL_PORT', ''),
     }
 }
 
