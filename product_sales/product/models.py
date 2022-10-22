@@ -3,6 +3,7 @@ from django.db import models
 from user.models import User
 # Create your models here.
 
+
 class Product(models.Model):
     name = models.CharField("상품이름", max_length=40)
     price = models.IntegerField("상품가격")
@@ -10,6 +11,7 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class PayHistory(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -21,4 +23,3 @@ class PayHistory(models.Model):
 
     def __str__(self):
         return self.user / self.product
-    
